@@ -497,6 +497,7 @@ function showScoreEditor(){
   const menuInfo = document.getElementById('menuInfo');
   const menuUpdates = document.getElementById('menuUpdates');
   const menuMusic = document.getElementById('menuMusic');
+  const returnMenuBtn = document.getElementById('returnMenu');
 
   // create audio instance for elevator music (looped)
   const musicAudio = new Audio('/Elevator Music.mp3');
@@ -710,6 +711,8 @@ function showScoreEditor(){
 
   function playGame(){
     if(mainMenu) mainMenu.setAttribute('aria-hidden','true');
+    // reveal in-game return button (it's a sibling element); mark aria-hidden false for clarity
+    if(returnMenuBtn) { returnMenuBtn.setAttribute('aria-hidden','false'); }
     scoreWrap.setAttribute('aria-hidden','false');
     // ensure the primary click button is focusable and focused for immediate play
     if(btn && typeof btn.focus === 'function') { btn.focus({ preventScroll: true }); }
@@ -750,6 +753,20 @@ function showScoreEditor(){
       openRebirthModal();
     });
     menuRebirth.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openRebirthModal(); } });
+  }
+
+  // Return-to-menu button wiring (visible while playing)
+  if(returnMenuBtn){
+    returnMenuBtn.addEventListener('click', () => {
+      if(mainMenu) mainMenu.setAttribute('aria-hidden','false');
+      // hide the return button again
+      returnMenuBtn.setAttribute('aria-hidden','true');
+      // move focus into the menu for keyboard users
+      const focusTarget = document.getElementById('menuPlay') || document.getElementById('menuInfo');
+      if(focusTarget && typeof focusTarget.focus === 'function') focusTarget.focus({ preventScroll: true });
+      showMessage('Returned to menu');
+    });
+    returnMenuBtn.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); returnMenuBtn.click(); } });
   }
 
   // make sure the menu buttons are keyboard/touch friendly
