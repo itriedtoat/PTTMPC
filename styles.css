@@ -279,6 +279,26 @@ body{
   font-size:13px;
 }
 
+/* floating return-to-menu button visible while main menu is hidden */
+.return-btn{
+  position:fixed;
+  left:14px;
+  bottom:12px;
+  padding:8px 10px;
+  font-size:13px;
+  border-radius:10px;
+  background:transparent;
+  border:1px solid rgba(0,0,0,0.06);
+  color:var(--muted);
+  z-index:110;
+  display:none; /* shown when main menu is hidden via sibling selector below */
+  box-shadow:none;
+}
+.main-menu[aria-hidden="true"] ~ .return-btn{ display:block; }
+
+/* pressed state */
+.return-btn:active{ transform:translateY(1px) scale(.997) }
+
 .score-wrap{
   display:flex;
   gap:8px;
